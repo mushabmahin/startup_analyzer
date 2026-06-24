@@ -1,0 +1,6 @@
+{
+  "name": "DueIntel",
+  "description": "Institutional-grade AI-powered startup due diligence platform for venture capital and angel investors to analyze pitch decks, financials, and market risks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
