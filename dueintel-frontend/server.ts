@@ -12,6 +12,7 @@ app.use(express.json());
 const upload = multer({ storage: multer.memoryStorage() });
 
 const PORT = 3000;
+const BACKEND_URL = process.env.BACKEND_URL || "http://127.0.0.1:8000";
 
 // Lazy initialize Gemini client if API key is present
 function getGeminiClient() {
@@ -136,7 +137,7 @@ app.post("/api/analyze-startup", upload.single("file"), async (req, res) => {
       if (stage) formData.append("stage", stage);
       if (description) formData.append("description", description);
 
-      const response = await fetch("http://127.0.0.1:8000/full-analysis", {
+      const response = await fetch(`${BACKEND_URL}/full-analysis`, {
         method: "POST",
         body: formData
       });
@@ -351,7 +352,7 @@ You MUST strictly match the following JSON Schema:
 // Proxy list analyses to FastAPI database
 app.get("/api/analyses", async (req, res) => {
   try {
-    const response = await fetch("http://127.0.0.1:8000/analyses");
+    const response = await fetch(`${BACKEND_URL}/analyses`);
     if (!response.ok) {
       throw new Error(`FastAPI analyses list error: ${response.status}`);
     }
@@ -368,7 +369,7 @@ app.get("/api/download-report/:filename", async (req, res) => {
   const { filename } = req.params;
   try {
     console.log(`Streaming PDF report from FastAPI: ${filename}`);
-    const response = await fetch(`http://127.0.0.1:8000/download-report/${filename}`);
+    const response = await fetch(`${BACKEND_URL}/download-report/${filename}`);
     if (!response.ok) {
       return res.status(response.status).json({ error: "Report not found on FastAPI backend." });
     }
